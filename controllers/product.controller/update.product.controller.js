@@ -1,4 +1,3 @@
-const bcrypt = require("bcrypt");
 const multer = require("multer");
 const fs = require("fs");
 const { Product, validate } = require("../../models/product.model");
@@ -27,7 +26,8 @@ const storage = multer.diskStorage({
 exports.update = async (req, res) => {
   try {
     let upload = multer({ storage: storage }).single("product_image");
-    upload(req, res, function (err) {
+    upload(req, res,async function (err) {
+      console.log(req.file);
       if (!req.file) {
         if (!req.body) {
           return res.status(400).send({

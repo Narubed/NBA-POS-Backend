@@ -21,7 +21,7 @@ const drive = google.drive({
 
 const storage = multer.diskStorage({
   filename: function (req, file, cb) {
-    cb(null, Date.now() + "-" + file.originalname);
+    cb(null, Date.now() + "-" );
   },
 });
 
@@ -31,14 +31,13 @@ exports.create = async (req, res) => {
     upload(req, res, async function (err) {
       if (!req.file) {
         const { error } = validate(req.body);
+        console.log(req.body);
         if (error)
           return res.status(400).send({ message: error.details[0].message });
         await new Product({
           ...req.body,
         }).save();
-        res
-          .status(201)
-          .send({ message: "สร้างผู้ใช้งานใหม่เเล้ว", status: true });
+        res.status(201).send({ message: "สร้างรายงานใหม่เเล้ว", status: true });
       } else if (err instanceof multer.MulterError) {
         return res.send(err);
       } else if (err) {
@@ -69,9 +68,7 @@ exports.create = async (req, res) => {
           ...req.body,
           product_image: response.data.id,
         }).save();
-        res
-          .status(201)
-          .send({ message: "สร้างผู้ใช้งานใหม่เเล้ว", status: true });
+        res.status(201).send({ message: "สร้างรายงานใหม่เเล้ว", status: true });
       } catch (error) {
         res
           .status(500)

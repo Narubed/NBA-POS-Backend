@@ -7,7 +7,7 @@ router.post("/", createProduct.create);
 router.put("/:id", updateProduct.update);
 router.get("/", product.findAll);
 router.get("/:id", product.findOne);
-router.get("/email/:id", product.findByBranch);
+router.get("/branch/:id", product.findByBranch);
 router.delete("/:id", product.delete);
 
 module.exports = router;

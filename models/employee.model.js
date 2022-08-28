@@ -18,7 +18,7 @@ const EmployeeSchema = new mongoose.Schema({
   employee_email: { type: String, required: true }, //เมล
   employee_password: { type: String, required: true }, //รหัส
   employee_phone: { type: String, required: true }, //เบอร์
-  employee_type: { type: String, required: false, default: "temporary" }, // temporary,casher, meneger
+  employee_type: { type: String, required: false, default: "พนักงานทั่วไป" }, // พนักงานทั่วไป,พนักงานเคาน์เตอร์,ผู้จัดการ
   employee_branch_id: { type: String, required: true }, // id สาขาที่อยู่
   employee_image: { type: String, required: false, default: "ไม่มี" },
   employee_status: { type: Boolean, required: false, default: true }, // เข้าสู่ระบบได้ไหม
@@ -42,7 +42,7 @@ const validate = (data) => {
       .required()
       .label("Employee_password"),
     employee_phone: Joi.string(),
-    employee_type: Joi.string().default("temporary"),
+    employee_type: Joi.string().default("พนักงานทั่วไป"),
     employee_branch_id: Joi.string(),
     employee_image: Joi.string().default("ไม่มี"),
     employee_status: Joi.boolean().default(true),

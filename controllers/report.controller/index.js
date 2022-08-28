@@ -1,11 +1,11 @@
 const bcrypt = require("bcrypt");
 const multer = require("multer");
 const fs = require("fs");
-const { Employee, validate } = require("../../models/employee.model");
+const { Report, validate } = require("../../models/report.model");
 
 exports.findAll = async (req, res) => {
   try {
-    Employee.find()
+    Report.find()
       .then(async (data) => {
         res.send({ data, message: "success", status: true });
       })
@@ -21,7 +21,7 @@ exports.findAll = async (req, res) => {
 exports.findOne = async (req, res) => {
   const id = req.params.id;
   try {
-    Employee.findById(id)
+    Report.findById(id)
       .then((data) => {
         if (!data)
           res
@@ -46,7 +46,7 @@ exports.findOne = async (req, res) => {
 exports.delete = async (req, res) => {
   const id = req.params.id;
   try {
-    Employee.findByIdAndRemove(id, { useFindAndModify: false })
+    Report.findByIdAndRemove(id, { useFindAndModify: false })
       .then((data) => {
         console.log(data);
         if (!data) {
@@ -83,81 +83,52 @@ exports.update = async (req, res) => {
       });
     }
     const id = req.params.id;
-    if (!req.body.employee_password) {
-      Employee.findByIdAndUpdate(id, req.body, { useFindAndModify: false })
-        .then((data) => {
-          if (!data) {
-            res.status(404).send({
-              message: `ไม่สามารถเเก้ไขผู้ใช้งานนี้ได้`,
-              status: false,
-            });
-          } else
-            res.send({
-              message: "แก้ไขผู้ใช้งานนี้เรียบร้อยเเล้ว",
-              status: true,
-            });
-        })
-        .catch((err) => {
-          res.status(500).send({
-            message: "มีบ่างอย่างผิดพลาด" + id,
-            status: false,
-          });
-        });
-    } else {
-      const salt = await bcrypt.genSalt(Number(process.env.SALT));
-      const hashPassword = await bcrypt.hash(req.body.employee_password, salt);
-      Employee.findByIdAndUpdate(
-        id,
-        { ...req.body, employee_password: hashPassword },
-        { useFindAndModify: false }
-      )
-        .then((data) => {
-          if (!data) {
-            res.status(404).send({
-              message: `ไม่สามารถเเก้ไขผู้ใช้งานนี้ได้`,
-              status: false,
-            });
-          } else
-            res.send({
-              message: "แก้ไขผู้ใช้งานนี้เรียบร้อยเเล้ว",
-              status: true,
-            });
-        })
-        .catch((err) => {
-          res.status(500).send({
-            message: "ไม่สามารถเเก้ไขผู้ใช้งานนี้ได้",
-            status: false,
-          });
-        });
-    }
-  } catch (error) {
-    res.status(500).send({ message: "มีบางอย่างผิดพลาด", status: false });
-  }
-};
 
-exports.findByEmail = async (req, res) => {
-  const id = req.params.id;
-  console.log(id);
-  try {
-    Employee.find({ employee_email: id })
+    Report.findByIdAndUpdate(id, req.body, { useFindAndModify: false })
       .then((data) => {
-        if (!data)
-          res
-            .status(404)
-            .send({ message: "ไม่สามารถหาผู้ใช้งานนี้ได้", status: false });
-        else res.send({ data, status: true });
+        console.log(data);
+        if (!data) {
+          res.status(404).send({
+            message: `ไม่สามารถเเก้ไขข้อมูลนี้ได้`,
+            status: false,
+          });
+        } else
+          res.send({
+            message: "แก้ไขข้อมูลนี้เรียบร้อยเเล้ว",
+            status: true,
+          });
       })
       .catch((err) => {
         res.status(500).send({
-          message: "มีบางอย่างผิดพลาด",
+          message: "มีบ่างอย่างผิดพลาด",
           status: false,
         });
       });
   } catch (error) {
-    res.status(500).send({
-      message: "มีบางอย่างผิดพลาด",
-      status: false,
-    });
+    res.status(500).send({ message: "มีบางอย่างผิดพลาด", status: false });
+  }
+};
+exports.create = async (req, res) => {
+  console.log("สร้าง");
+  try {
+    const { error } = validate(req.body);
+    if (error)
+      return res
+        .status(400)
+        .send({ message: error.details[0].message, status: false });
+
+    const result = await new Report({
+      ...req.body,
+    }).save();
+    res
+      .status(201)
+      .send({
+        message: "สร้างข้อมูลสำเร็จ",
+        status: true,
+        report: result,
+      });
+  } catch (error) {
+    res.status(500).send({ message: "มีบางอย่างผิดพลาด", status: false });
   }
 };
 
@@ -165,7 +136,7 @@ exports.findByBranch = async (req, res) => {
   const id = req.params.id;
   console.log(id);
   try {
-    Employee.find({ employee_branch_id: id })
+    Report.find({ report_branch_id: id })
       .then((data) => {
         if (!data)
           res

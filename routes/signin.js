@@ -88,6 +88,7 @@ router.post("/", async (req, res) => {
         status: false,
       });
     }
+    
     const token = member.generateAuthToken();
 
     const newUser = {

@@ -1,11 +1,14 @@
 const bcrypt = require("bcrypt");
 const multer = require("multer");
 const fs = require("fs");
-const { Report, validate } = require("../models/report.model");
+const {
+  ReportInvoiceFull,
+  validate,
+} = require("../../models/report.invoice.full.model");
 
 exports.findAll = async (req, res) => {
   try {
-    Report.find()
+    ReportInvoiceFull.find()
       .then(async (data) => {
         res.send({ data, message: "success", status: true });
       })
@@ -21,7 +24,7 @@ exports.findAll = async (req, res) => {
 exports.findOne = async (req, res) => {
   const id = req.params.id;
   try {
-    Report.findById(id)
+    ReportInvoiceFull.findById(id)
       .then((data) => {
         if (!data)
           res
@@ -46,7 +49,7 @@ exports.findOne = async (req, res) => {
 exports.delete = async (req, res) => {
   const id = req.params.id;
   try {
-    Report.findByIdAndRemove(id, { useFindAndModify: false })
+    ReportInvoiceFull.findByIdAndRemove(id, { useFindAndModify: false })
       .then((data) => {
         console.log(data);
         if (!data) {
@@ -84,7 +87,9 @@ exports.update = async (req, res) => {
     }
     const id = req.params.id;
 
-    Report.findByIdAndUpdate(id, req.body, { useFindAndModify: false })
+    ReportInvoiceFull.findByIdAndUpdate(id, req.body, {
+      useFindAndModify: false,
+    })
       .then((data) => {
         console.log(data);
         if (!data) {
@@ -117,10 +122,14 @@ exports.create = async (req, res) => {
         .status(400)
         .send({ message: error.details[0].message, status: false });
 
-    await new Report({
+    const result = await new ReportInvoiceFull({
       ...req.body,
     }).save();
-    res.status(201).send({ message: "สร้างข้อมูลสำเร็จ", status: true });
+    res.status(201).send({
+      message: "สร้างข้อมูลสำเร็จ",
+      status: true,
+      report: result,
+    });
   } catch (error) {
     res.status(500).send({ message: "มีบางอย่างผิดพลาด", status: false });
   }
@@ -130,7 +139,7 @@ exports.findByBranch = async (req, res) => {
   const id = req.params.id;
   console.log(id);
   try {
-    Report.find({ branch_owner_id: id })
+    ReportInvoiceFull.find({ rif_branch_id: id })
       .then((data) => {
         if (!data)
           res
