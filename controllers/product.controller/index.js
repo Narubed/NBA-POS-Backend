@@ -2,12 +2,15 @@ const bcrypt = require("bcrypt");
 const multer = require("multer");
 const fs = require("fs");
 const { Product, validate } = require("../../models/product.model");
+const checkToken = require("../../lib/checkToken");
 
-exports.findAll = async (req, res) => {
+exports.findAll = async (req, res, next) => {
+  // await checkToken(req, res, next);
+
   try {
     Product.find()
       .then(async (data) => {
-        res.send({ data, message: "success", status: true });
+        res.status(201).send({ data, message: "success", status: true });
       })
       .catch((err) => {
         res.status(500).send({

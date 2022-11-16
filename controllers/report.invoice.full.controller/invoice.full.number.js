@@ -12,15 +12,15 @@ exports.findDate = async (req, res) => {
 
   try {
     ReportInvoiceFull.find({
-      report_branch_id: req.body.branch,
+      rif_branch_id: req.body.branch,
     }).then((value) => {
       if (!value) {
         res.status(404);
       } else {
-        console.log(value);
+        console.log("ค่าที่รีเทอนกลับมา =>>>>>>> ", value);
         const findDate = value.filter(
           (item) =>
-            dayjs(item.report_timestamp).format("MM/YYYY") ===
+            dayjs(item.rif_timestamp).format("MM/YYYY") ===
             dayjs(req.body.date).format("MM/YYYY")
         );
         if (findDate.length < 9) {
@@ -52,12 +52,12 @@ exports.findDate = async (req, res) => {
             }`,
           });
         } else if (findDate.length < 99999) {
-          res.send({
-            status: true,
-            invoice_full: `F${dayjs(Date.now()).format("YYYYMM")}${
-              findDate.length + 1
-            }`,
-          });
+          // res.send({
+          //   status: true,
+          //   invoice_full: `F${dayjs(Date.now()).format("YYYYMM")}${
+          //     findDate.length + 1
+          //   }`,
+          // });
         }
       }
     });

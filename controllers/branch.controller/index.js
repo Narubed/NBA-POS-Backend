@@ -101,7 +101,7 @@ exports.findByOwner = async (req, res) => {
   const id = req.params.id;
   console.log(id);
   try {
-    Branch.find({ report_branch_id: id })
+    Branch.find({ branch_owner_id: id })
       .then((data) => {
         if (!data)
           res
