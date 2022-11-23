@@ -2,6 +2,7 @@ const router = require("express").Router();
 const { Owners } = require("../models/owner.model");
 const { Employee } = require("../models/employee.model");
 const { Branch } = require("../models/branch.model");
+const dayjs = require("dayjs");
 const bcrypt = require("bcrypt");
 const Joi = require("joi");
 require("dotenv").config();
@@ -82,13 +83,19 @@ router.post("/", async (req, res) => {
       branch_owner_id: member._id,
       branch_status: true,
     });
-    if (findBranch.length === 0 || !findBranch) {
+    console.log(findBranch);
+    const findByDateEnd = findBranch.filter(
+      (item) =>
+        dayjs(item.branch_date_end).format() > dayjs(req.body.date).format()
+    );
+    console.log(findByDateEnd);
+    if (findByDateEnd.length === 0 || !findByDateEnd) {
       return res.status(401).send({
         message: "อีเมลหรือรหัสผ่านผิด",
         status: false,
       });
     }
-    
+
     const token = member.generateAuthToken();
 
     const newUser = {
@@ -97,7 +104,7 @@ router.post("/", async (req, res) => {
       phone: member.owner_phone,
       type: "owner",
       type_detail: "owner",
-      branch: findBranch[0]._id,
+      branch: findByDateEnd[0]._id,
       status: member.owner_status,
     };
     res.status(200).send({

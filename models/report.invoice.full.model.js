@@ -34,6 +34,7 @@ const ReportInvoiceFullSchema = new mongoose.Schema({
   }, // เลขที่ใบกำกับภาษีย่อ
   rif_money: { type: Number, required: false, default: 0 },
   rif_payment_type: { type: String, required: false, default: "เงินสด" }, // ประเภทการชำระเงิน
+  rif_payment_number: { type: String, required: false, default: "ไม่มี" },
   rif_timestamp: { type: Date, required: false, default: Date.now() },
 });
 
@@ -72,6 +73,7 @@ const validate = (data) => {
     rif_tax_invoice_number_full: Joi.string().default("ไม่มี"),
     rif_money: Joi.number().default(0),
     rif_payment_type: Joi.string().default("เงินสด"),
+    rif_payment_number: Joi.string().default("ไม่มี"),
     rif_timestamp: Joi.date().raw().default(Date.now()),
   });
   return schema.validate(data);
