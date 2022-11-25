@@ -54,6 +54,7 @@ router.post("/", async (req, res) => {
         });
       }
       const newEmployee = {
+        token: token,
         _id: employee._id,
         name: employee.employee_name,
         phone: employee.employee_phone,
@@ -99,6 +100,7 @@ router.post("/", async (req, res) => {
     const token = member.generateAuthToken();
 
     const newUser = {
+      token: token,
       _id: member._id,
       name: member.owner_name,
       phone: member.owner_phone,
