@@ -5,7 +5,7 @@ const dayjs = require("dayjs");
 const { Report, validate } = require("../../models/report.model");
 
 exports.findDate = async (req, res) => {
-  console.log(req.body);
+  console.log("FindDate Number => ",req.body);
 
   try {
     Report.find({
@@ -14,7 +14,7 @@ exports.findDate = async (req, res) => {
       if (!value) {
         res.status(404);
       } else {
-        console.log(value);
+        console.log(value.length);
         const findDate = value.filter(
           (item) =>
             dayjs(item.report_timestamp).format("MM/YYYY") ===
