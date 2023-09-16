@@ -35,6 +35,7 @@ app.use(
   auth,
   require("./routes/report.invoice.full")
 );
+app.use("/api/nba-pos/sales", auth, require("./routes/sales"));
 
 const port = process.env.PORT || 9010;
 // const server = app.listen(port, console.log(`Listening on port ${port}...`));
