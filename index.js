@@ -37,6 +37,6 @@ app.use(
 );
 app.use("/api/nba-pos/sales", auth, require("./routes/sales"));
 
-const port = process.env.PORT || 9010;
+const port = process.env.PORT || 7000;
 // const server = app.listen(port, console.log(`Listening on port ${port}...`));
 app.listen(port, console.log(`Listening on port ${port}...`));
